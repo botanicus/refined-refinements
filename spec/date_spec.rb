@@ -1,6 +1,8 @@
-require 'pomodoro/exts/date_exts'
+require 'refined-refinements/date'
 
-describe DateExts do
+describe RR::DateExts do
+  using RR::DateExts
+
   let(:monday)    { Date.new(2017, 2, 20).extend(described_class) }
   let(:tuesday)   { Date.new(2017, 2, 21).extend(described_class) }
   let(:wednesday) { Date.new(2017, 2, 22).extend(described_class) }

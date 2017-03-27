@@ -1,7 +1,7 @@
-require 'refined-refinements/core_exts'
+require 'refined-refinements/matching'
 
-describe RR::CoreExts do
-  using RR::CoreExts
+describe RR::MatchingExts do
+  using RR::MatchingExts
 
   describe 'String#sub' do
     context 'with a block' do
