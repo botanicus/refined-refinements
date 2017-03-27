@@ -27,6 +27,9 @@ GEM
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
     slop (3.6.0)
+    term-ansicolor (1.4.1)
+      tins (~> 1.0)
+    tins (1.13.2)
 
 PLATFORMS
   ruby
@@ -35,6 +38,7 @@ DEPENDENCIES
   pry
   refined-refinements!
   rspec
+  term-ansicolor
 
 BUNDLED WITH
    1.14.6
