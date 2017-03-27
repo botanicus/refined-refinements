@@ -1,3 +1,9 @@
+# About
+
+Collection of core class extensions I found useful across multiple projects. They are implemented as refinements, they do not override the global scope, so are safe to use.
+
+Refinements allow you to redefine methods on core classes only within given context. For instance if you have class Foo and you want to redefine String#gsub only within that class, you can do so using refinements. Magnus Holm wrote a nice [intro into refinements](http://timelessrepo.com/refinements-in-ruby).
+
 ## RR::ColourExts
 
 ```ruby
