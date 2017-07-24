@@ -98,9 +98,13 @@ module RR
       if help then help
       elsif help.nil? && ! options.empty?
         options = options.map.with_index { |key, index|
-          "<green>#{key}</green> <magenta>#{index + 1}</magenta>"
+          if default == key
+            "<green.bold>#{key}</green.bold> <bright_black>default</bright_black>"
+          else
+            "<green>#{key}</green> <magenta>#{index + 1}</magenta>"
+          end
         }.join(' ').colourise
-        default ? "#{options}; defaults to #{default}" : options
+        # default ? "#{options}; defaults to #{default}" : options
       else end
     end
   end
