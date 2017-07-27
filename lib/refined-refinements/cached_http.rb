@@ -7,7 +7,7 @@ require 'base64'
 module RR
   module CachedHttp
     def self.cache_dir
-      @cache_dir || raise('Set CachedHttp.cache_dir!')
+      @cache_dir || '/tmp'
     end
 
     def self.cache_dir=(cache_dir)
