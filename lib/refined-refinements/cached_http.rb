@@ -23,7 +23,7 @@ module RR
     end
 
     def self.cache_path(url)
-      File.join(self.cache_dir, Base64.encode64(url).chomp)
+      File.join(self.cache_dir, Base64.encode64(url).chomp.split("\n").last)
     end
 
     def self.get(url)
