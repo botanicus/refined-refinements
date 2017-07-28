@@ -1,3 +1,5 @@
+require 'readline'
+
 module RR
   class InvalidResponse < StandardError; end
 
@@ -79,8 +81,8 @@ module RR
       answer.instance_eval(&block)
 
       help = help(**options)
-      print "<bold>#{prompt_text}</bold>#{" (#{help})" if help}: ".colourise
-      @data[key] = answer.run(STDIN.readline.chomp)
+      prompt = "<bold>#{prompt_text}</bold>#{" (#{help})" if help}: ".colourise
+      @data[key] = answer.run(Readline.readline(prompt, true))
       raise InvalidResponse.new if @data[key].nil? && options[:required]
       @data[key]
     rescue InvalidResponse => error
@@ -106,6 +108,16 @@ module RR
         }.join(' ').colourise
         # default ? "#{options}; defaults to #{default}" : options
       else end
+    end
+
+    def set_completion_proc(proc, character = ' ', &block)
+      original_append_character = Readline.completion_append_character
+      Readline.completion_append_character = ' '
+      Readline.completion_proc = proc
+      block.call
+    ensure
+      Readline.completion_proc = nil
+      Readline.completion_append_character = original_append_character
     end
   end
 end
