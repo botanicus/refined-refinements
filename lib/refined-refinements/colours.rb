@@ -107,47 +107,6 @@ module RR
         result
       end
     end
-
-    # TODO: Use a separate file.
-    if defined?(Curses)
-      refine Curses::Window do
-        def defined_fg_colours
-          Curses.constants.grep(/^COLOR_/).map do |colour|
-            colour.to_s.sub(/^COLOR_/, '').downcase.to_sym
-          end
-        end
-
-        def defined_bg_colours
-          Curses.constants.grep(/^A_/).map do |colour|
-            colour.to_s.sub(/^A_/, '').downcase.to_sym
-          end
-        end
-
-        # window.write("<red>Dog's <bold>bollocks</bold>!</red>")
-        def write(template)
-          @log ||= File.open("commander.log", 'a')
-          template.chunks_with_colours.each do |chunk, colours|
-            fg = colours.find { |method| self.defined_fg_colours.include?(method) }
-            bg = colours.find { |method| self.defined_bg_colours.include?(method) }
-            @log.puts({t: chunk}.inspect); @log.flush ####
-
-            if (fg || bg) && ! colours.include?(:clear)
-              fg_colour = fg ? Curses.const_get(:"COLOR_#{fg.to_s.upcase}") : Curses::COLOR_WHITE
-              bg_colour = bg ? Curses.const_get(:"A_#{bg.to_s.upcase}") : Curses::A_NORMAL
-              # @log.puts({fg: [fg, fg_colour], bg: [bg, bg_colour], t: chunk}.inspect); @log.flush
-
-              Curses.init_pair(fg_colour, fg_colour, Curses::COLOR_BLACK)
-
-              self.attron(Curses.color_pair(fg_colour) | Curses::COLOR_WHITE) do
-                self.addstr(chunk)
-              end
-            else
-              self.addstr(chunk)
-            end
-          end
-        end
-      end
-    end
   end
 end
 

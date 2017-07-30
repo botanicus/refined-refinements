@@ -1,5 +1,3 @@
-require 'readline'
-
 module RR
   class InvalidResponse < StandardError; end
 
@@ -70,8 +68,11 @@ module RR
     using RR::ColourExts
 
     attr_reader :data
-    def initialize
-      @data = Hash.new
+    def initialize(&block)
+      @data, @block = Hash.new, block || Proc.new do |prompt|
+        require 'readline'
+        Readline.readline(prompt, true)
+      end
     end
 
     # options: ['one', 'two']
@@ -82,7 +83,7 @@ module RR
 
       help = help(**options)
       prompt = "<bold>#{prompt_text}</bold>#{" (#{help})" if help}: ".colourise
-      @data[key] = answer.run(Readline.readline(prompt, true))
+      @data[key] = answer.run(@block.call(prompt))
       raise InvalidResponse.new if @data[key].nil? && options[:required]
       @data[key]
     rescue InvalidResponse => error
@@ -111,11 +112,13 @@ module RR
     end
 
     def set_completion_proc(proc, character = ' ', &block)
+      return unless defined?(::Readline)
       original_append_character = Readline.completion_append_character
       Readline.completion_append_character = ' '
       Readline.completion_proc = proc
       block.call
     ensure
+      return unless defined?(::Readline)
       Readline.completion_proc = nil
       Readline.completion_append_character = original_append_character
     end
