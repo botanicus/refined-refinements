@@ -20,6 +20,10 @@ class KeyboardInterrupt < StandardError
   def ctrl_d?
     @key_code == 4
   end
+
+  def inspect
+    "#<#{self.class.name}: @key_code=#{@key_code.inspect}>"
+  end
 end
 
 class App
@@ -50,7 +54,10 @@ class App
     Curses.nonl # enter is 13
   end
 
-# TODO: Ctrl+a, Ctrl+e, Ctrl+k, delete.
+  # TODO: Ctrl+a, Ctrl+e, Ctrl+k, delete.
+  # TODO: unicode handling. Currently #getch is not unicode aware.
+  #   Each unicode char would trigger #getch twice, with numeric values such as
+  #   é: 195, 169 or ś: 197, 155.
   def readline(prompt, window = @current_window, &unknown_key_handler)
     Curses.noecho
     window.write(prompt)

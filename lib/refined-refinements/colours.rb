@@ -1,4 +1,5 @@
 require 'term/ansicolor'
+require 'refined-refinements/string'
 require 'refined-refinements/matching'
 
 module RR
@@ -106,6 +107,33 @@ module RR
 
         result
       end
+    end
+  end
+
+  class TemplateString
+    using RR::StringExts
+    using RR::ColourExts
+
+    def initialize(template_string = '')
+      @template_string = template_string
+    end
+
+    def length
+      self.remove_tags.length
+    end
+
+    def titlecase
+      @template_string.sub(/>(#{self.remove_tags[0]})/) do |match|
+        ">#{$1.upcase}"
+      end
+    end
+
+    def remove_tags
+      @template_string.gsub(/<[^>]+>/, '')
+    end
+
+    def to_s
+      @template_string.colourise
     end
   end
 end

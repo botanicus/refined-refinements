@@ -10,6 +10,8 @@
 #   end
 # end
 
+require 'refined-refinements/colours'
+
 module RR
   class InvalidResponse < StandardError; end
 
@@ -18,10 +20,10 @@ module RR
       @callbacks = Hash.new { Proc.new { true } }
     end
 
-    def validate_raw_value(regexp, allow_empty: nil)
+    def validate_raw_value(*regexps, allow_empty: nil)
       @callbacks[:validate_raw_value] = Proc.new do |raw_value|
-        unless (allow_empty && raw_value.empty?) || raw_value.match(regexp)
-          raise InvalidResponse.new("Doesn't match #{regexp}.")
+        unless (allow_empty && raw_value.empty?) || regexps.any? { |regexp| raw_value.match(regexp) }
+          raise InvalidResponse.new("Doesn't match any of the regexps.")
         end
       end
     end
@@ -39,7 +41,7 @@ module RR
       clean_value = @callbacks[:get_clean_value].call(raw_value)
 
       unless @callbacks[:validate_clean_value].call(clean_value)
-        raise InvalidResponse.new
+        raise InvalidResponse.new("validate_clean_value failed")
       end
 
       clean_value
@@ -99,7 +101,7 @@ module RR
       raise InvalidResponse.new if @data[key].nil? && options[:required]
       @data[key]
     rescue InvalidResponse => error
-      puts "<red>Invalid response</red>, try again.".colourise
+      puts "<red>Invalid response</red> (#{error.message}), try again.".colourise
       retry
     end
 
