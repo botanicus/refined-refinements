@@ -55,6 +55,7 @@ class App
   end
 
   # TODO: Ctrl+a, Ctrl+e, Ctrl+k, delete.
+  #
   # TODO: unicode handling. Currently #getch is not unicode aware.
   #   Each unicode char would trigger #getch twice, with numeric values such as
   #   é: 195, 169 or ś: 197, 155.
@@ -63,9 +64,17 @@ class App
     window.write(prompt)
 
     buffer, cursor, original_x = String.new, 0, window.curx
+    char_buffer = []
+
     until (char = window.getch) == 13
       begin
-        buffer, cursor = process_char(char, buffer, cursor, window, original_x)
+        if (190..200).include?(char) # Reading unicode.
+          char_buffer = [char]
+        else
+          char_buffer << char
+          buffer, cursor = process_chars(char_buffer, buffer, cursor, window, original_x)
+          char_buffer.clear
+        end
       rescue KeyboardInterrupt => interrupt
         unknown_key_handler.call(interrupt) if unknown_key_handler
       end
@@ -102,6 +111,17 @@ class App
 
   def commander
     Commander.new
+  end
+
+  def process_chars(chars, buffer, cursor, window, original_x)
+    @log ||= File.open('log', 'a')
+    @log.puts("#{Time.now.to_i}: #{chars.inspect}")
+    @log.flush
+    if chars.length > 1
+      # TODO:
+    else
+      process_char(chars[0], buffer, cursor, window, original_x)
+    end
   end
 
   def process_char(char, buffer, cursor, window, original_x)

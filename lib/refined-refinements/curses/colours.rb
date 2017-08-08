@@ -17,9 +17,7 @@ module RR
 
       # window.write("<red>Dog's <bold>bollocks</bold>!</red>")
       def write(template)
-        @log ||= File.open("commander.log", 'a')
         template.chunks_with_colours.each do |chunk, colours|
-          @log.write("#{[:c, colours].inspect}\n"); @log.flush
           attributes = colours.select { |method| self.defined_attributes.include?(method) }.map do |attribute_name|
             Curses.const_get(:"A_#{attribute_name.to_s.upcase}") || raise("Unknown attribute #{attribute_name}.")
           end
