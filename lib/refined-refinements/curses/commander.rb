@@ -35,6 +35,7 @@ class Commander
     Curses.curs_set(0)
 
     commander_window = Curses::Window.new(Curses.lines, Curses.cols, 0, 0)
+    commander_window.keypad = true
 
     if block
       block.call(self, commander_window)
@@ -45,8 +46,10 @@ class Commander
 
     command_key = commander_window.getch
     if command = self.find_command(command_key)
+      raise 'kurwa kurwa kurva pyca do pyce pico zpicena nepyc tadu kurwa pyca'
       command.execute(commander_window, command_key) # Return message.
     else
+      # TODO: command not found, display message?
       self.run(&block) # Restart.
     end
   ensure
