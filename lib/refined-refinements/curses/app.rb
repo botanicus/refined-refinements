@@ -122,6 +122,10 @@ class App
     @log ||= File.open('log', 'a')
     @log.puts("#{Time.now.to_i}: #{chars.inspect}")
     @log.flush
+    # Tes-Ctrl+a-Ctrl+k produces [1] for Ctrl+a and [1, 11] for Ctrl+k.
+    # Multiple presses of Ctrl+whatever alternates, for instance for Ctrl+e
+    # it is [5], [5, 5], [5], [5, 5] etc. Therefore only the last number is relevant.
+    chars = [chars[-1]] if chars.all? { |char| char.is_a?(Integer) && char < 100 }
     if chars.length > 1
       # TODO:
       process_char('É', buffer, cursor, window, original_x)
@@ -132,6 +136,17 @@ class App
 
   def process_char(char, buffer, cursor, window, original_x)
     case char
+    when 1 # Ctrl+a.
+      cursor = 0
+    when 5 # Ctrl+e.
+      cursor = buffer.length
+    when 11 # Ctrl+k.
+      # yank_register = buffer[cursor..-1] # Ctrl+y suspends it currently.
+      if cursor == 0
+        buffer = ''
+      else
+        buffer = buffer[0..(cursor - 1)]
+      end
     when 127 # Backspace.
       unless buffer.empty?
         buffer = buffer[0..-2]; cursor -= 1
