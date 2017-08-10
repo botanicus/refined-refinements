@@ -66,7 +66,7 @@ class App
     buffer, cursor, original_x = String.new, 0, window.curx
     char_buffer = []
 
-    until (char = window.getch) == 13
+    until (char = window.getch) == 13 || @quit
       begin
         if (190..200).include?(char) # Reading unicode.
           char_buffer = [char]
@@ -76,7 +76,11 @@ class App
           char_buffer.clear
         end
       rescue KeyboardInterrupt => interrupt
-        unknown_key_handler.call(interrupt) if unknown_key_handler
+        begin
+          unknown_key_handler.call(interrupt) if unknown_key_handler
+        rescue QuitError
+          @quit = true
+        end
       end
 
       # begin
@@ -92,11 +96,12 @@ class App
       # window.write(buffer + sp)
 
       # DBG
-      # a, b = window.cury, cursor + original_x
+      a, b = window.cury, cursor + original_x
       # window.setpos(window.cury + 1, 0)
       # window.write("<blue.bold>~</blue.bold> DBG: X position <green>#{original_x}</green>, cursor <green>#{cursor}</green>, buffer <green>#{buffer.inspect}</green>, history: <green>#{@history.inspect}</green> ... writing to <green>#{a}</green> x <green>#{b}</green>")
       # window.setpos(window.cury - 1, cursor + original_x)
 
+      window.setpos(window.cury, cursor + original_x)
       window.refresh
     end
 
@@ -119,6 +124,7 @@ class App
     @log.flush
     if chars.length > 1
       # TODO:
+      process_char('É', buffer, cursor, window, original_x)
     else
       process_char(chars[0], buffer, cursor, window, original_x)
     end

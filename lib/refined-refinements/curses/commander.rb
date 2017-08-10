@@ -46,7 +46,6 @@ class Commander
 
     command_key = commander_window.getch
     if command = self.find_command(command_key)
-      raise 'kurwa kurwa kurva pyca do pyce pico zpicena nepyc tadu kurwa pyca'
       command.execute(commander_window, command_key) # Return message.
     else
       # TODO: command not found, display message?
