@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'base64'
+require 'socket' # undefined SocketError otherwise, it's weird.
 
 # RR::CachedHttp.cache_dir = 'tmp'
 # # RR::CachedHttp.offline = true
