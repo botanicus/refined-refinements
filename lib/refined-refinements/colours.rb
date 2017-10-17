@@ -29,6 +29,9 @@ module RR
           # This is a problem with bold: true or in curses, where the text never
           # get rendered.
           string = options[:bold] ? "<bold>#{self}</bold>" : self
+
+          # "hey\n" -> wrapping with escape sequences after \n breaks chomp, strip and the likes.
+          string.gsub!(/(\s*)<\/bold>/, '</bold>\1')
         end
 
         result = string.gsub(RR::ColourExts::REGEXP) do |match|
