@@ -34,7 +34,7 @@ module RR
 
     def run(command_name, args)
       command_class = self.class.commands[command_name]
-      command = command_class.new(self.command_instantiation_arguments(args))
+      command = command_class.new(args)
       command.run
     end
   end
