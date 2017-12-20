@@ -23,7 +23,7 @@ module RR
 
     def help
       self.commands.reduce(self.help_template) do |buffer, (command_name, command_class)|
-        command_help = command_class.help.split("\n").map { |line| line.sub(/^\s*/, '') }.join("\n")
+        command_help = command_class.help && command_class.help.split("\n").map { |line| line.sub(/^ {4}/, '') }.join("\n")
         command_class.help ? [buffer, command_help].join("\n") : buffer
       end.colourise
     end
