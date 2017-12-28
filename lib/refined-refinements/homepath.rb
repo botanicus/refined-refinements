@@ -1,7 +1,11 @@
 module RR
   class Homepath
     def initialize(path)
-      @path = File.expand_path(path)
+      if path.start_with?('~')
+        @path = File.expand_path(path)
+      else
+        @path = path # Can be relative.
+      end
     end
 
     def to_s
