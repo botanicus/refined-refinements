@@ -139,6 +139,33 @@ module RR
       @template_string.colourise
     end
   end
+
+  module ColouredTerminal
+    def self.included(base)
+      require 'pry'; binding.pry ###
+      class << base
+        [:puts, :print, :warn, :abort].each do |method_name|
+          define_method(method_name) do |*args|
+            Kernel.send(method_name, *args.map do |argument|
+              argument.is_a?(String) ? argument.colourise : argument
+            end)
+          end
+        end
+      end
+    end
+
+    refine Kernel do
+      using ColourExts
+
+      [:puts, :print, :warn, :abort].each do |method_name|
+        define_method(method_name) do |*args|
+          Kernel.send(method_name, *args.map do |argument|
+            argument.is_a?(String) ? argument.colourise : argument
+          end)
+        end
+      end
+    end
+  end
 end
 
 # using RR::ColourExts
