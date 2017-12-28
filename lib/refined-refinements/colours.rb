@@ -141,9 +141,10 @@ module RR
   end
 
   module ColouredTerminal
+    using ColourExts
+
     def self.included(base)
-      require 'pry'; binding.pry ###
-      class << base
+      base.class_eval do
         [:puts, :print, :warn, :abort].each do |method_name|
           define_method(method_name) do |*args|
             Kernel.send(method_name, *args.map do |argument|
