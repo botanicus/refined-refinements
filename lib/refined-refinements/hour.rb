@@ -5,8 +5,11 @@ class Hour
   end
 
   def self.now
-    now = Time.now
-    self.new(now.hour, now.min)
+    self.from(Time.now)
+  end
+
+  def self.from_time(time)
+    self.new(time.hour, time.min)
   end
 
   attr_reader :minutes
