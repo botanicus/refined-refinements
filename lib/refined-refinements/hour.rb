@@ -5,7 +5,7 @@ class Hour
   end
 
   def self.now
-    self.from(Time.now)
+    self.from_time(Time.now)
   end
 
   def self.from_time(time)
