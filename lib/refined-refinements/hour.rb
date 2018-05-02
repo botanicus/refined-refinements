@@ -13,7 +13,22 @@ class Hour
   end
 
   attr_reader :minutes
-  def initialize(hours, minutes = 0)
+  def initialize(*args)
+    if args.length == 1 && args.first.is_a?(Hash)
+      self.initialize_from_keyword_args(**args.first)
+    else
+      self.initialize_legacy(*args)
+    end
+  end
+
+  def initialize_legacy(hours, minutes = 0)
+    @minutes = (hours * 60) + minutes
+  end
+
+  # TODO: parse 0:1:20
+  # TODO: format 1:30 / 90min
+  # TODO: hr: 1, min: 20, sec: false to disable sec or sth like that.
+  def initialize_from_keyword_args(hr: 0, min: 0, sec: 0)
     @minutes = (hours * 60) + minutes
   end
 
@@ -30,6 +45,10 @@ class Hour
         raise TypeError.new("Hour or Integer (for minutes) expected, got #{hour_or_minutes.class}.")
       end
     end
+  end
+
+  def /(ratio)
+    self.class.new(0, self.minutes / ratio)
   end
 
   def hours
