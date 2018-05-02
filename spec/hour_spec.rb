@@ -1,5 +1,4 @@
-require 'spec_helper'
-require 'pomodoro/exts/hour'
+require 'refined-refinements/hour'
 
 describe Hour do
   describe '#initialize' do
