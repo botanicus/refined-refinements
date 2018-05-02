@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'refined-refinements'
-  s.version     = '0.0.2.2'
+  s.version     = '0.0.2.3'
   s.authors     = ['James C Russell']
   s.email       = 'james@101ideas.cz'
   s.homepage    = 'http://github.com/botanicus/refined-refinements'
