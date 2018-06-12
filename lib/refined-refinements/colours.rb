@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable all
 
 require 'term/ansicolor'
 require 'refined-refinements/string'
