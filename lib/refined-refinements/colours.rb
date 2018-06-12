@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'term/ansicolor'
 require 'refined-refinements/string'
 require 'refined-refinements/matching'

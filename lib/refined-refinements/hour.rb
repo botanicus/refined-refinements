@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Hour
   def self.parse(string)
     hours, minutes = string.split(':')

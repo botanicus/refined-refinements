@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'refined-refinements/matching'
 
 describe RR::MatchingExts do

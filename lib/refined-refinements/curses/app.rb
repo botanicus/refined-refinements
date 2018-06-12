@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'curses'
 require 'refined-refinements/curses/colours'
 require 'refined-refinements/curses/commander'

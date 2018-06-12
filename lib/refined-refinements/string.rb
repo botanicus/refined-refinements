@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RR
   module StringExts
     refine String do

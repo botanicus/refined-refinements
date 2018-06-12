@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'open-uri'
 require 'base64'
 require 'socket' # undefined SocketError otherwise, it's weird.

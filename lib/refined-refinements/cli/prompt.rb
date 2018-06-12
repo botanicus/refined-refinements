@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # def prompt_type
 #   @prompt.prompt(:type, 'Type', options: Expense::TYPES) do
 #     clean_value do |raw_value|

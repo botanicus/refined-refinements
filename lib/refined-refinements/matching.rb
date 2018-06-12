@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RR
   module MatchingExts
     # Counter-intuitively when regexp replacement methods are called with a block,
