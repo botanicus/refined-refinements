@@ -178,3 +178,7 @@ end
 # puts s1.colourise, ''
 # puts s2.colourise(bold: true), ''
 # puts s3.colourise, ''
+#
+# OR DIRECT (without .colourise):
+# using RR::ColouredTerminal
+# puts "<green>Test</green>"
