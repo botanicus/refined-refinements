@@ -16,18 +16,18 @@ module RR
     end
 
     def help_template(program_name)
-      <<-EOF
-<red.bold>:: #{program_name} ::</red.bold>
+      <<~EOF
+        <red.bold>:: #{program_name} ::</red.bold>
 
-<cyan.bold>Commands</cyan.bold>
+        <cyan.bold>Commands</cyan.bold>
       EOF
     end
 
     def help
-      self.commands.reduce(self.help_template) do |buffer, (command_name, command_class)|
+      self.commands.reduce(self.help_template) { |buffer, (command_name, command_class)|
         command_help = command_class.help && command_class.help.split("\n").map { |line| line.sub(/^ {4}/, '') }.join("\n")
         command_class.help ? [buffer, command_help].join("\n") : buffer
-      end.colourise
+      }.colourise
     end
 
     def commands
@@ -48,7 +48,7 @@ module RR
     class << self
       attr_accessor :help
       def main_command
-        File.basename($0)
+        File.basename($PROGRAM_NAME)
       end
     end
 

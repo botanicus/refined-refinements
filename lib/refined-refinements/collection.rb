@@ -24,11 +24,9 @@ module RR
 
     def items(&block)
       @items ||= self.load_raw_collection.map do |data|
-        begin
           block.call(data)
-        rescue => error
+      rescue StandardError => error
           abort "Loading item #{data.inspect} failed: #{error.message}.\n\n#{error.backtrace}"
-        end
       end
     end
 
@@ -50,7 +48,7 @@ module RR
     end
 
     def filter_out(filter_name, &block)
-      @activity_filters[filter_name] = Proc.new { |item| ! block.call(item) } if block
+      @activity_filters[filter_name] = Proc.new { |item| !block.call(item) } if block
       self
     end
 
@@ -59,7 +57,7 @@ module RR
     end
 
     def has_filter?(filter_name)
-      @activity_filters.has_key?(filter_name)
+      @activity_filters.key?(filter_name)
     end
 
     def filtered_out_items(filter_name)
@@ -101,7 +99,7 @@ module RR
 
     def save_to(path)
       updated_data = self.serialise
-      if (! File.exist?(path)) || File.read(path) != updated_data
+      if !File.exist?(path) || File.read(path) != updated_data
         path.open('w') do |file|
           file.write(updated_data)
         end

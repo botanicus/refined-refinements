@@ -3,17 +3,17 @@
 module RR
   class Homepath
     def initialize(path)
-      if path.start_with?('~')
-        @path = File.expand_path(path)
+      @path = if path.start_with?('~')
+        File.expand_path(path)
       else
-        @path = path # Can be relative.
-      end
+        path # Can be relative.
+              end
     end
 
     def to_s
       @path.sub(ENV['HOME'], '~')
     end
-    alias_method :inspect, :to_s
+    alias inspect to_s
 
     def expand
       @path

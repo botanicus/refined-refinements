@@ -44,7 +44,7 @@ class Hour
       elsif hour_or_minutes.is_a?(Integer)
         self.class.new(0, @minutes.send(method_name, hour_or_minutes))
       else
-        raise TypeError.new("Hour or Integer (for minutes) expected, got #{hour_or_minutes.class}.")
+        raise TypeError, "Hour or Integer (for minutes) expected, got #{hour_or_minutes.class}."
       end
     end
   end
@@ -73,7 +73,7 @@ class Hour
       elsif anotherHour.is_a?(Time)
         self.send(method_name, Hour.now)
       else
-        raise TypeError.new("#{self.class}##{method_name} expects #{self.class} or Time object.")
+        raise TypeError, "#{self.class}##{method_name} expects #{self.class} or Time object."
       end
     end
   end
@@ -81,7 +81,7 @@ class Hour
   def inspect
     "#{self.hours}:#{format('%02d', self.minutes_over_the_hour)}"
   end
-  alias_method :to_s, :inspect
+  alias to_s inspect
 
   def to_time(today = Time.now)
     Time.new(today.year, today.month, today.day, self.hours, self.minutes_over_the_hour)

@@ -47,7 +47,7 @@ class App
   end
 
   def destroy
-    raise QuitAppError.new
+    raise QuitAppError
   end
 
   def set_up
@@ -70,7 +70,7 @@ class App
 
     until (char = window.getch) == 13 || @quit
       begin
-        if (190..200).include?(char) # Reading unicode.
+        if (190..200).cover?(char) # Reading unicode.
           char_buffer = [char]
         else
           char_buffer << char
@@ -79,7 +79,7 @@ class App
         end
       rescue KeyboardInterrupt => interrupt
         begin
-          unknown_key_handler.call(interrupt) if unknown_key_handler
+          unknown_key_handler&.call(interrupt)
         rescue QuitError
           @quit = true
         end
@@ -113,7 +113,7 @@ class App
     # window.write([:input, buffer].inspect + "\n")
     # window.refresh
     # sleep 2.5
-    return buffer
+    buffer
   end
 
   def commander
@@ -144,11 +144,11 @@ class App
       cursor = buffer.length
     when 11 # Ctrl+k.
       # yank_register = buffer[cursor..-1] # Ctrl+y suspends it currently.
-      if cursor == 0
-        buffer = ''
+      buffer = if cursor == 0
+        ''
       else
-        buffer = buffer[0..(cursor - 1)]
-      end
+        buffer[0..(cursor - 1)]
+               end
     when 127 # Backspace.
       unless buffer.empty?
         buffer = buffer[0..-2]; cursor -= 1
@@ -162,11 +162,11 @@ class App
       @history_index ||= @history.length - 1
 
       window.setpos(window.cury + 1, 0)
-      window.write("DBG: #{@history_index}, #{(0..@history.length).include?(@history_index)}")
+      window.write("DBG: #{@history_index}, #{(0..@history.length).cover?(@history_index)}")
       window.setpos(window.cury - 1, cursor + original_x)
       window.refresh
 
-      if (0..@history.length).include?(@history_index)
+      if (0..@history.length).cover?(@history_index)
         @buffer_before_calling_history = buffer
         buffer = @history[@history_index - 1]
       else
@@ -190,9 +190,9 @@ class App
       # window.addch(char)
       buffer.insert(cursor, char); cursor += 1
     else
-      raise KeyboardInterrupt.new(char) # TODO: Just return it, it's not really an error.
+      raise KeyboardInterrupt, char # TODO: Just return it, it's not really an error.
     end
 
-    return buffer, cursor
+    [buffer, cursor]
   end
 end

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable all
 
 require 'term/ansicolor'
 require 'refined-refinements/string'
@@ -51,7 +50,7 @@ module RR
 
         # block.call(result, Array.new, options) #unless was_called
 
-        result.match(RR::ColourExts::REGEXP) ? result.colourise(options.merge(recursed: true)) : result #block.call(result, [options[:bold] ? :bold : nil].compact, options)
+        result.match?(RR::ColourExts::REGEXP) ? result.colourise(options.merge(recursed: true)) : result #block.call(result, [options[:bold] ? :bold : nil].compact, options)
       end
 
       # FIXME: bold true doesn't do anything for the text that is not wrapped
@@ -130,7 +129,7 @@ module RR
 
     def titlecase
       @template_string.sub(/>(#{self.remove_tags[0]})/) do |match|
-        ">#{$1.upcase}"
+        ">#{Regexp.last_match(1).upcase}"
       end
     end
 

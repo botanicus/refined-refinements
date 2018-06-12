@@ -30,7 +30,7 @@ module RR
             attributes << (Curses.color_pair(fg_colour) | Curses::COLOR_WHITE)
           end
 
-          if ! attributes.empty? && ! colours.include?(:clear)
+          if !attributes.empty? && !colours.include?(:clear)
             self.multi_attron(*attributes) do
               self.addstr(chunk)
             end

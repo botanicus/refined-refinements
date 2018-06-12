@@ -25,7 +25,7 @@ module RR
     def validate_raw_value(*regexps, allow_empty: nil)
       @callbacks[:validate_raw_value] = Proc.new do |raw_value|
         unless (allow_empty && raw_value.empty?) || regexps.any? { |regexp| raw_value.match(regexp) }
-          raise InvalidResponse.new("Doesn't match any of the regexps.")
+          raise InvalidResponse, "Doesn't match any of the regexps."
         end
       end
     end
@@ -43,14 +43,14 @@ module RR
       clean_value = @callbacks[:get_clean_value].call(raw_value)
 
       unless @callbacks[:validate_clean_value].call(clean_value)
-        raise InvalidResponse.new("validate_clean_value failed")
+        raise InvalidResponse, "validate_clean_value failed"
       end
 
       clean_value
     end
 
     def self_or_retrieve_by_index(list, raw_value, default_value = nil)
-      if raw_value.match(/^\d+$/)
+      if /^\d+$/.match?(raw_value)
         list[raw_value.to_i - 1]
       elsif raw_value.empty?
         default_value
@@ -60,19 +60,19 @@ module RR
     end
 
     def retrieve_by_index_or_self_if_on_the_list(list, raw_value, default_value = nil)
-      if raw_value.match(/^\d+$/)
+      if /^\d+$/.match?(raw_value)
         list[raw_value.to_i - 1]
       elsif list.include?(raw_value)
         raw_value
       elsif raw_value.empty? && default_value
         default_value
       else
-        raise InvalidResponse.new(raw_value)
+        raise InvalidResponse, raw_value
       end
     end
 
     def convert_money_to_cents(raw_value)
-      if raw_value.match(/\./)
+      if /\./.match?(raw_value)
         raw_value.delete('.').to_i
       else
         "#{raw_value}00".to_i
@@ -100,7 +100,7 @@ module RR
       help = help(**options)
       prompt = "<bold>#{prompt_text}</bold>#{" (#{help})" if help}: ".colourise
       @data[key] = answer.run(@block.call(prompt))
-      raise InvalidResponse.new if @data[key].nil? && options[:required]
+      raise InvalidResponse if @data[key].nil? && options[:required]
       @data[key]
     rescue InvalidResponse => error
       puts "<red>Invalid response</red> (#{error.message}), try again.".colourise
@@ -115,7 +115,7 @@ module RR
     # TODO: If it evals as nil, shall we still add it to the data?
     def help(help: nil, options: Array.new, default: nil, **rest)
       if help then help
-      elsif help.nil? && ! options.empty?
+      elsif help.nil? && !options.empty?
         options = options.map.with_index { |key, index|
           if default == key
             "<green.bold>#{key}</green.bold> <bright_black>default</bright_black>"
@@ -124,7 +124,7 @@ module RR
           end
         }.join(' ').colourise
         # default ? "#{options}; defaults to #{default}" : options
-      else end
+      end
     end
 
     def set_completion_proc(proc, character = ' ', &block)

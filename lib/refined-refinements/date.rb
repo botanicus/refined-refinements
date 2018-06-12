@@ -10,7 +10,7 @@ module RR
       end
 
       def weekday?
-        ! self.weekend?
+        !self.weekend?
       end
     end
   end

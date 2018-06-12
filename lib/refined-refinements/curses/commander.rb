@@ -94,7 +94,7 @@ class Commander
   def available_commands_help
     commands_help = @commands.reduce(Array.new) { |buffer, command|
       keys_text = command.keys.join_with_and('or') { |word| "<yellow.bold>#{word}</yellow.bold>" }
-      buffer << "#{keys_text}"
+      buffer << keys_text.to_s
     }.join_with_and
 
     "<green>Available commands</green> are #{commands_help}. Press <yellow>?</yellow> for <red>help</red>."

@@ -1,4 +1,5 @@
 #!/usr/bin/env gem build
+# frozen_string_literal: true
 
 Gem::Specification.new do |s|
   s.name        = 'refined-refinements'
