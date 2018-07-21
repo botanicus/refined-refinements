@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'term/ansicolor'
 require 'refined-refinements/string'
 require 'refined-refinements/matching'
@@ -58,7 +56,7 @@ module RR
       def colourise(options = Hash.new)
         colours = RR::ColourExts.colours
 
-        self.parse_colours(options) do |inner_text, methods, options|
+        self.dup.parse_colours(options) do |inner_text, methods, options|
           methods.reduce(inner_text) do |result, method|
             # (print '  '; p [:r, result, method]) if result.match(/(<\/[^>]+>)/) ####
             result.gsub!(/(<\/[^>]+>)/, "#{colours.send(method)}\\1")
