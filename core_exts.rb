@@ -1,10 +1,5 @@
-# rubocop:disable all
-
-# We cannot use the frozen string comment as we're aliasing the bang methods.
-# Even if so, something in rubocop processors makes colours.rb fail.
-
-module RR
-  module MatchingExts
+module ACERA
+  module CoreExts
     # Counter-intuitively when regexp replacement methods are called with a block,
     # the first and only block argument is the whole match as a string.
     #
@@ -17,7 +12,7 @@ module RR
     #
     # With this refinement you can access these variables through block arguments:
     #
-    #   using RR::CoreExts
+    #   using ACERA::CoreExts
     #
     #   'Hello world!'.sub(/(?<word>[a-zA-Z]+)/) do |match, string_before_match, string_after_match|
     #     match[:word].upcase
